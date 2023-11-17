@@ -1,0 +1,25 @@
+/api-project
+/api-react-redux
+/eclipsereactproject
+/foodapp
+/hello-world
+/hooks
+/loginredux
+/react-http
+/react-redux
+/reactfirst
+/redux-demo
+/sbr-project
+/todo-list-redux
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
