@@ -1,33 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { submitBasicInfo, submitAddressInfo, storeFormData } from '../redux/action';
- 
-const withCounter = (WrappedComponent, formType) => {
-  const WithCounter = ({ storeFormData, ...otherprops}) => {
-    // const { submitBasicInfo, submitAddressInfo } = props;
+import { storeFormData } from '../redux/action';
 
+const withCounter = (WrappedComponent) => {
+  const WithCounter = ({ storeFormData, ...otherProps }) => {
     const handleSubmit = (formData) => {
       storeFormData(formData);
-    }
- 
+    };
+
     return (
-      
-        <WrappedComponent
-          onSubmit={handleSubmit}
-          {...otherprops}
-          // submitBasicInfo={submitBasicInfo}
-          // submitAddressInfo={submitAddressInfo}
-        />
+      <WrappedComponent
+        onSubmit={handleSubmit}
+        {...otherProps}
+      />
     );
   };
- 
+
   const mapDispatchToProps = {
-    storeFormData
-    // submitBasicInfo,
-    // submitAddressInfo,
+    storeFormData,
   };
- 
+
   return connect(null, mapDispatchToProps)(WithCounter);
 };
- 
+
 export default withCounter;

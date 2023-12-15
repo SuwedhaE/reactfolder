@@ -9,11 +9,14 @@ import { Link, useLocation } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useDispatch();
-  // const location = useLocation();
   const { formValues } = useSelector((state) => state.data);
 
   useEffect(() => {
     dispatch(loadUsersStart());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(loadAddressStart());
   }, [dispatch]);
 
   const handleDelete = (id) => {
@@ -23,7 +26,9 @@ const Home = () => {
     }
   };
 
-  console.log(formValues);
+  useEffect(() => {
+    console.log(formValues);
+  }, [formValues]);
 
   return (
     <div className="container">
@@ -42,27 +47,18 @@ const Home = () => {
           </tr>
         </thead>
         <tbody>
-          {formValues &&
+          {
+            formValues && formValues.length > 0 &&
             formValues.map((user, num) => (
               <tr key={user.id}>
-                <th scope="row">{num}</th>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-                <td>{user.address.city}</td>
-                <td>{user.address.state}</td>
-                <td>{user.address.country}</td>
-                {/* {users.address ? (
-                  <>
-                    <td>{user.address.city}</td>
-                    <td>{user.address.state}</td>
-                    <td>{user.address.country}</td>
-                  </>
-                ) : (
-                  <>
-                    <td>Address not provided</td>
-                  </>
-                )} */}
+                <th scope="row">{num + 1}</th>
+                <td>{user.name || 'N/A'}</td>
+          <td>{user.email || 'N/A'}</td>
+          <td>{user.phone || 'N/A'}</td>
+          <td>{user.address && user.address.city ? user.address.city : 'N/A'}</td>
+          <td>{user.address && user.address.state ? user.address.state : 'N/A'}</td>
+          <td>{user.address && user.address.country ? user.address.country : 'N/A'}</td>
+
                 <td>
                   <Link
                     to={"editinfo/" + user.id}
@@ -87,7 +83,6 @@ const Home = () => {
 
 const mapStateToProps = (state) => ({
   formValues: state.formValues || [],
-  // users: state.users,
 });
 
 const mapDispatchToProps = {

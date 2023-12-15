@@ -2,12 +2,12 @@ import * as types from "./actionTypes"
 
 export const loadUsersStart = (basicInfo) => ({
     type: types.LOAD_USERS_START,
-    payload: basicInfo,
+    // payload: basicInfo,
 });
 
 export const loadAddressStart = (addressInfo) => ({
     type: types.LOAD_ADDRESS_START,
-    payload: addressInfo,
+    // payload: addressInfo,
 });
 
 export const loadUsersSuccess = (formValues) => ({
@@ -20,18 +20,19 @@ export const loadUsersError = (error) => ({
     payload: error,
 });
 
-export const createUserStart = (users) => ({
+export const createUserStart = (user) => ({
     type: types.CREATE_USER_START,
-    payload: users,
+    payload: user,
 });
 
-export const createAddressStart = (users) => ({
+export const createAddressStart = (address) => ({
     type: types.CREATE_ADDRESS_START,
-    payload: users,
+    payload: address,
 });
 
-export const createUserSuccess = () => ({
+export const createUserSuccess = (userData) => ({
     type: types.CREATE_USER_SUCCESS,
+    payload: userData,
 });
 
 export const createUserError = (error) => ({

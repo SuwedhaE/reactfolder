@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { updateUserStart, submitAddressInfo, createAddressStart } from "../redux/action";
 import withCounter from "../components/withCounter";
 
-const initialState = {
-  name: "",
-  email: "",
-  phone: "",
-  address: {
-    city: "",
-    state: "",
-    country: ""
-  }
-};
+// const initialState = {
+//   name: "",
+//   email: "",
+//   phone: "",
+//   address: {
+//     city: "",
+//     state: "",
+//     country: ""
+//   }
+// };
 
 const AddressInfo = ({ submitAddressInfo }) => {
   const { UserName } = useParams();
-  const [formData, setFormData] = useState(initialState);
+  let location = useLocation();
+  const [name, setName] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const formData = { city, state, country, };
   const [editMode, setEditMode] = useState(false);
   const { users } = useSelector((state) => state.data);
-  const { address } = formData || {};
-  const { city, state, country } = address || {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -31,54 +34,73 @@ const AddressInfo = ({ submitAddressInfo }) => {
     if (id) {
       setEditMode(true);
       const singleUser = users.find((item) => item.id === Number(id));
-      setFormData({ ...singleUser });
+      // setFormData({ ...singleUser });
     } else {
       setEditMode(false);
-      setFormData({ ...initialState });
+      // setFormData({ ...initialState });
     }
   }, [id]);
 
-  const handleAddressChange = (e) => {
-    console.log(typeof(city));
-    let { name, value } = e.target;
-    setFormData({
-       ...formData, 
-       address: {
-        ...formData.address,
-        [name]: value 
-       }
-    });
-  };
+  // const handleAddressChange = (e) => {
+  //   console.log(typeof(city));
+  //   let { name, value } = e.target;
+  //   setFormData({
+  //      ...formData, 
+  //      address: {
+  //       ...formData.address,
+  //       [name]: value 
+  //      }
+  //   });
+  // };
 
   const handleSubmit = (e) => {
-    debugger
-    console.log("userName", UserName);
-    e.preventDefault();
 
-    setFormData({
-      ...formData, 
-       name: 'test' 
-   });
-   
-    console.log(typeof(city));
-    console.log(formData);
+    e.preventDefault();
     if (city && state && country) {
-      console.log(`city: ${city}, states: ${state}, country: ${country}`)
+      const formData = { city, state, country }; // Collect form data
       if (!editMode) {
         dispatch(createAddressStart(formData));
         alert("User added successfully");
         navigate("/");
       } else {
         dispatch(updateUserStart({ id, formData }));
-        setEditMode(false);
         alert("Updated successfully");
         navigate("/");
       }
+      submitAddressInfo(formData); // Dispatch address info
     }
-   
-    submitAddressInfo({ formData });
-
   };
+
+
+
+  //   debugger
+  //   console.log("userName", UserName);
+  //   e.preventDefault();
+
+  // //   setFormData({
+  // //     ...formData, 
+  // //      name: 'test' 
+  // //  });
+   
+  //   console.log(typeof(city));
+  //   console.log(formData);
+  //   if (city && state && country) {
+  //     console.log(`city: ${city}, states: ${state}, country: ${country}`)
+  //     if (!editMode) {
+  //       dispatch(createAddressStart(formData));
+  //       alert("User added successfully");
+  //       navigate("/");
+  //     } else {
+  //       dispatch(updateUserStart({ id, formData }));
+  //       setEditMode(false);
+  //       alert("Updated successfully");
+  //       navigate("/");
+  //     }
+  //   }
+   
+  //   submitAddressInfo({ formData });
+
+  // };
 
 
   return (
@@ -98,8 +120,8 @@ const AddressInfo = ({ submitAddressInfo }) => {
                     className="form-control"
                     name="city"
                     required
-                    value={formData.address.city || ""}
-                    onChange={handleAddressChange}
+                    value={formData.city || ""}
+                    onChange={(e) => setCity(e.target.value)}
                   ></input>
                 </div>
                 <div className="mb-3">
@@ -109,8 +131,8 @@ const AddressInfo = ({ submitAddressInfo }) => {
                     className="form-control"
                     name="state"
                     required
-                    value={formData.address.state || ""}
-                    onChange={handleAddressChange}
+                    value={formData.state || ""}
+                    onChange={(e) => setState(e.target.value)}
                   ></input>
                 </div>
                 <div className="mb-3">
@@ -120,13 +142,13 @@ const AddressInfo = ({ submitAddressInfo }) => {
                     className="form-control"
                     name="country"
                     required
-                    value={formData.address.country || ""}
-                    onChange={handleAddressChange}
+                    value={formData.country || ""}
+                    onChange={(e) => setCountry(e.target.value)}
                   ></input>
                 </div>
                 <div className="text-center">
                   <button className="btn btn-success">
-                    {editMode ? "update" : "Submit"}
+                    {editMode ? "update" : "Submit"} 
                   </button>
                   {/* <input type='Reset' className='btn btn-danger ms-2' value="reset"/> */}
                 </div>

@@ -16,9 +16,9 @@ function* onLoadUsersStartAsync() {
     }
 }
 
-function* onLoadAddressStartAsync() {
+function* onLoadAddressStartAsync({ payload }) {
     try{
-        const response = yield call(loadUsersApi);
+        const response = yield call(loadUsersApi, payload);
         if(response.status === 200) {
             yield delay(500);
             yield put(loadUsersSuccess(response.data));

@@ -4,49 +4,50 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { createUserStart, updateUserStart, submitBasicInfo } from "../redux/action";
 import withCounter from "../components/withCounter";
 
-const initialState = {
-  name: "",
-  email: "",
-  phone: "",
-  address: {
-    city: "",
-    state: "",
-    country: ""
-  }
-};
+// const initialState = {
+//   name: "",
+//   email: "",
+//   phone: "",
+//   address: {
+//     city: "",
+//     state: "",
+//     country: ""
+//   }
+// };
 
 const BasicInfo = ({ submitBasicInfo }) => {
-  const [formData, setFormData] = useState(initialState);
+
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [editMode, setEditMode] = useState(false);
-  const { users } = useSelector((state) => state.data);
-  const { name, email, phone } = formData;
+  const { formValues } = useSelector((state) => state.data);
+  const formData = { name, email, phone };
   const navigate = useNavigate();
-  const location =useLocation();
   const dispatch = useDispatch();
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
       setEditMode(true);
-      const singleUser = users.find((item) => item.id === Number(id));
-      setFormData({ ...singleUser });
+      const singleUser = formValues.find((item) => item.id === Number(id));
+      setName(singleUser.name);
+      setEmail(singleUser.email);
+      setPhone(singleUser.phone);
     } else {
       setEditMode(false);
-      setFormData({ ...initialState });
+      // Set initial values or clear the form when not editing
+      setName('');
+      setEmail('');
+      setPhone('');
     }
-  }, [id],[location]);
-console.log(location);
-  const handleChange = (e) => {
-    let { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  }, [id, formValues]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('data : ', name , email, phone)
     if (name && email && phone) {
       if (!editMode) {
-        console.log(createUserStart, formData)
         dispatch(createUserStart(formData));
         navigate(`/addextra?UserName=${name}`);
       } else {
@@ -55,6 +56,51 @@ console.log(location);
         navigate("/addextra");
       }
     }
+
+
+
+//   // const [formData, setFormData] = useState(initialState);
+//   const [name, setName] = useState('');
+//   const [email, setEmail] = useState('');
+//   const [phone, setPhone] = useState('');
+//   const [editMode, setEditMode] = useState(false);
+//   const { users } = useSelector((state) => state.data);
+//   const formData = { name, email, phone };
+//   const navigate = useNavigate();
+//   const location =useLocation();
+//   const dispatch = useDispatch();
+//   const { id } = useParams();
+
+//   useEffect(() => {
+//     if (id) {
+//       setEditMode(true);
+//       const singleUser = users.find((item) => item.id === Number(id));
+//       // setFormData({ ...singleUser });
+//     } else {
+//       setEditMode(false);
+//       // setFormData({ ...initialState });
+//     }
+//   }, [id],[location]);
+// console.log(location);
+//   // const handleChange = (e) => {
+//   //   let { name, value } = e.target;
+//   //   setFormData({ ...formData, [name]: value });
+//   // };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     console.log('data : ', name , email, phone)
+//     if (name && email && phone) {
+//       if (!editMode) {
+//         console.log(createUserStart, formData)
+//         dispatch(createUserStart(formData));
+//         navigate(`/addextra?UserName=${name}`);
+//       } else {
+//         dispatch(updateUserStart({ id, formData }));
+//         setEditMode(false);
+//         navigate("/addextra");
+//       }
+//     }
     submitBasicInfo({ formData });
   };
 
@@ -76,7 +122,7 @@ console.log(location);
                     name="name"
                     required
                     value={formData.name || ""}
-                    onChange={handleChange}
+                    onChange={(e) => setName(e.target.value)}
                   ></input>
                 </div>
                 <div className="mb-3">
@@ -87,7 +133,7 @@ console.log(location);
                     name="email"
                     required
                     value={formData.email || ""}
-                    onChange={handleChange}
+                    onChange={(e) => setEmail(e.target.value)}
                   ></input>
                 </div>
                 <div className="mb-3">
@@ -98,12 +144,12 @@ console.log(location);
                     name="phone"
                     required
                     value={formData.phone || ""}
-                    onChange={handleChange}
+                    onChange={(e) => setPhone(e.target.value)}
                   ></input>
                 </div>
                 <div className="text-center">
-                  <button className="btn btn-success" type="submit">
-                    {editMode ? "update" : "Next"}
+                  <button className="btn btn-primary">
+                    Next{"  ->"}
                   </button>
                 </div>
               </form>
